@@ -46,6 +46,30 @@ class OrderTest {
     }
 
     @Test
+    @DisplayName("항목이 하나 있을 때 부분취소를 하면 주문이 취소된다.")
+    void 항목이_하나_있을_때_부분취소를_하면_주문이_취소_된다(){
+        Order order = Order.place(keyboardItem);
+
+        order.cancelItem(keyboardItem);
+
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.CANCELED);
+    }
+
+    @Test
+    @DisplayName("부분취소를 할 수 있다.")
+    void 부분취소를_할_수_있다(){
+        Order order = Order.place(keyboardItem);
+        order.addItem(mouseItem);
+
+        order.cancelItem(keyboardItem);
+
+        assertThat(order.getOrderItems())
+                .hasSize(1)
+                .containsExactly(mouseItem);
+    }
+
+
+    @Test
     @DisplayName("배송이 시작되면 항목을 추가할 수 없다")
     void 배송이_시작되면_항목을_추가할_수_없다() {
         Order order = Order.place(keyboardItem);
