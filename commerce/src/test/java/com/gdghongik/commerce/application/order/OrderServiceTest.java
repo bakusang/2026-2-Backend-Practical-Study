@@ -5,8 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.gdghongik.commerce.application.order.dto.CreateOrderCommand;
 import com.gdghongik.commerce.application.order.dto.OrderResult;
+import com.gdghongik.commerce.application.product.FakeProductRepository;
+import com.gdghongik.commerce.application.product.ProductService;
+import com.gdghongik.commerce.domain.order.OrderRepository;
 import com.gdghongik.commerce.domain.product.Product;
+import com.gdghongik.commerce.domain.product.ProductRepository;
 import com.gdghongik.commerce.infrastructure.persistence.ProductJpaRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +25,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 class OrderServiceTest {
 
-    @Autowired
+    //@Autowired
     private OrderService orderService;
 
-    @Autowired
-    private ProductJpaRepository productRepository;
+    //@Autowired
+    private OrderRepository orderRepository;
+    private ProductRepository productRepository;
+
+    @BeforeEach
+    void setUp(){
+        orderRepository = new FakeOrderRepository();
+        productRepository = new FakeProductRepository();
+        orderService = new OrderService(orderRepository, productRepository);
+    }
 
     @Test
     @DisplayName("상품을 주문하면 주문이 생성된다")

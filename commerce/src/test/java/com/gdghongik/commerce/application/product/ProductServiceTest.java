@@ -1,7 +1,9 @@
 package com.gdghongik.commerce.application.product;
 
 import com.gdghongik.commerce.domain.product.Product;
+import com.gdghongik.commerce.domain.product.ProductRepository;
 import com.gdghongik.commerce.infrastructure.persistence.ProductJpaRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,17 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Transactional
 class ProductServiceTest {
 
-    @Autowired
+    //@Autowired
     private ProductService productService;
 
-    @Autowired
-    private ProductJpaRepository productRepository;
+    //@Autowired
+    private ProductRepository productRepository;
+
+    @BeforeEach
+    void setUp(){
+        productRepository = new FakeProductRepository();
+        productService = new ProductService(productRepository);
+    }
 
     @Test
     @DisplayName("재고를 정상적으로 감소시킨다")
